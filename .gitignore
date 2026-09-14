@@ -1,0 +1,15 @@
+# Java build output
+out/
+*.class
+
+# macOS
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Temporary files
+*.log
+*.tmp

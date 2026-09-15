@@ -12,8 +12,9 @@ public class Main {
             testFlowchart();
             testClassDiagram();
             testFontSizes();
+            testMagneticPorts();
             testEditorArchitectureSample();
-            System.out.println("Self-test OK: flowchart + classDiagram + UML edge mappings + font sizes + editor architecture sample (v1.0)");
+            System.out.println("Self-test OK: flowchart + classDiagram + UML edges + fonts + magnetic ports + editor sample");
             return;
         }
 
@@ -74,6 +75,24 @@ public class Main {
         DiagramEdge edge = new DiagramEdge(node, node, "label", EdgeType.ASSOCIATION);
         edge.setLabelFontSize(18);
         if (edge.getLabelFontSize() != 18) throw new IllegalStateException("Edge label font size failed");
+    }
+
+    private static void testMagneticPorts() {
+        DiagramNode a = new DiagramNode("A", "A", ShapeType.RECTANGLE);
+        DiagramNode b = new DiagramNode("B", "B", ShapeType.RECTANGLE);
+        DiagramEdge edge = new DiagramEdge(a, b, "", EdgeType.ASSOCIATION);
+        edge.attachFrom(a, PortSide.RIGHT, 4);
+        edge.attachTo(b, PortSide.LEFT, 0);
+        edge.setRouteOffset(42.0);
+        if (!edge.isFromPortFixed() || edge.getFromSide() != PortSide.RIGHT || edge.getFromPortIndex() != 4) {
+            throw new IllegalStateException("From magnetic port failed");
+        }
+        if (!edge.isToPortFixed() || edge.getToSide() != PortSide.LEFT || edge.getToPortIndex() != 0) {
+            throw new IllegalStateException("To magnetic port failed");
+        }
+        if (Math.abs(edge.getRouteOffset() - 42.0) > 0.001) throw new IllegalStateException("Route offset failed");
+        edge.clearPorts();
+        if (edge.isFromPortFixed() || edge.isToPortFixed()) throw new IllegalStateException("Port reset failed");
     }
 
     private static void testEditorArchitectureSample() {
